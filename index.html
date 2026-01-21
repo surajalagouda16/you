@@ -9,6 +9,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Quicksand:wght@300;400;500;600&amp;family=Dancing+Script:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     /* Background Music Button */
+  .music-btn {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  transition: all 0.3s ease;
+}
+
+.music-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255,107,157,0.35);
+}
+
 #musicToggle {
   position: fixed;
   top: 20px;
@@ -1153,10 +1171,14 @@
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full">
-  <audio id="bgMusic" loop preload="auto">
-  <source src="song.mp3" type="audio/mpeg">
-  </audio>
-
+  <audio id="bgMusic" preload="auto"></audio>
+  <div class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">
+  <button class="music-btn" data-song="song.mp3">💛 instrumental agar tum saath ho</button>
+  <button class="music-btn" data-song="song2.mp3">🌸 titli</button>
+  <button class="music-btn" data-song="song3.mp3">🎀 sahiba</button>
+  <button class="music-btn" data-song="song4.mp3">🌙 yeno yeno</button>
+  <button class="music-btn" data-song="song5.mp3">✨ ek din aap yun</button>
+</div>
 
   <div class="main-wrapper animated-bg"><!-- Morphing Blobs -->
    <div class="blob" style="width: 400px; height: 400px; background: var(--accent-primary); top: 10%; left: 10%; z-index: 0;"></div>
@@ -1978,27 +2000,25 @@
     
     // Start live counter
     updateCounter();
-    // ================= BACKGROUND MUSIC (AUTO PLAY) =================
+    // ================= SONG SELECTION MUSIC SYSTEM =================
 const bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.10;
+const songButtons = document.querySelectorAll(".music-btn");
 
-// Try autoplay on load
-window.addEventListener("load", () => {
-  bgMusic.play().catch(() => {
-    // Fallback: play on first interaction
-    const startMusic = () => {
-      bgMusic.play().catch(() => {});
-      document.removeEventListener("click", startMusic);
-      document.removeEventListener("scroll", startMusic);
-      document.removeEventListener("touchstart", startMusic);
-    };
+let currentSong = "";
+bgMusic.volume = 0.25;
 
-    document.addEventListener("click", startMusic);
-    document.addEventListener("scroll", startMusic);
-    document.addEventListener("touchstart", startMusic);
+songButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const song = btn.getAttribute("data-song");
+
+    if (currentSong === song) return;
+
+    currentSong = song;
+    bgMusic.src = song;
+    bgMusic.play().catch(() => {});
   });
 });
-// ================================================================
+// ===============================================================
 
 
     // Initialize SDK
